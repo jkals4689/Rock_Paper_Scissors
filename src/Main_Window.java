@@ -21,6 +21,17 @@ public class Main_Window extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 setVisible(false);
+                new OneRockPaperScissors("가위 바위 보");
+            }
+
+        });
+
+        mJB.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setVisible(false);
+                new TwoRockPaperScissors("묵찌빠");
             }
 
         });
