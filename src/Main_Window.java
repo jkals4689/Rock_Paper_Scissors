@@ -1,14 +1,16 @@
 import javax.swing.*;
 
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
+class Define {
+    public static final int MAX_WIDTH = 500;
+    public static final int MAX_HEIGHT = 500;
+}
 public class Main_Window extends JFrame {
+    // Interface myPan1 = new JPanel();
+    // JPanel mainPain = myPan1.getPanel(); 
+    public static JPanel mainPan = new JPanel();
     Util util = new Util();
-
-    JPanel pan = new JPanel();
-    JPanel contentPanel = new JPanel();
     JLabel sel_Game = new JLabel("Select Game");
 
     public Main_Window(String str) {
@@ -26,15 +28,15 @@ public class Main_Window extends JFrame {
         buttonBox.add(Box.createHorizontalStrut(50));
         buttonBox.add(util.mJB).setMaximumSize(new Dimension(150, 150));
 
-        pan.setLayout(new BoxLayout(pan, BoxLayout.Y_AXIS));
-        pan.add(Box.createVerticalStrut(50));
-        pan.add(labelBox);
-        pan.add(buttonBox);
+        mainPan.setLayout(new BoxLayout(mainPan, BoxLayout.Y_AXIS));
+        mainPan.add(Box.createVerticalStrut(50));
+        mainPan.add(labelBox);
+        mainPan.add(buttonBox);
 
-        add(pan);
-
+        add(mainPan);   
+        
         setResizable(false);
-        setSize(500, 500);
+        setSize(Define.MAX_WIDTH, 500);
         setVisible(true);
     }
 }
