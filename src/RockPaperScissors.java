@@ -1,20 +1,11 @@
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.lang.management.PlatformManagedObject;
-import java.net.CookieHandler;
-
+import java.awt.*;
 import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
 
 public class RockPaperScissors extends JFrame {
     private JPanel titlePan, contentPan, resultPan, buttonPan, retryPan, labelPan;
-
+    Util.RPS_Util util = new Util.RPS_Util();
     public RockPaperScissors(String str) {
+        util.rps_click();
         JLabel gameName = new JLabel(str, SwingConstants.CENTER);
 
         // 가위바위보 게임 이름
@@ -42,7 +33,7 @@ public class RockPaperScissors extends JFrame {
 
         buttonPan = new JPanel();
         buttonPan.setBackground(Color.cyan);
-        buttonPan.add(button("가위"));
+        buttonPan.add(util.scissors);
         buttonPan.add(Box.createHorizontalStrut(30));
         buttonPan.add(button("바위"));
         buttonPan.add(Box.createHorizontalStrut(30));
@@ -56,7 +47,7 @@ public class RockPaperScissors extends JFrame {
         Main_Window.mainPan.add(Box.createVerticalStrut(20));
         Main_Window.mainPan.add(contentPan);
         Main_Window.mainPan.add(resultPan);
-        Main_Window.mainPan.add(retryPan);
+        Main_Window.mainPan.add(buttonPan);
         // Main_Window.mainPan.add(pcNuser);
     }
 

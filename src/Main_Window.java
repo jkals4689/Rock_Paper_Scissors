@@ -10,13 +10,13 @@ public class Main_Window extends JFrame {
     // Interface myPan1 = new JPanel();
     // JPanel mainPain = myPan1.getPanel(); 
     public static JPanel mainPan = new JPanel();
-    Util util = new Util();
+    Util.Main_Util util = new Util.Main_Util();
     JLabel sel_Game = new JLabel("Select Game");
 
     public Main_Window(String str) {
         super(str);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        util.click();
+        util.main_click();
 
         Box buttonBox = Box.createHorizontalBox();
         Box labelBox = Box.createHorizontalBox();
