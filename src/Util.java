@@ -47,27 +47,27 @@ public class Util extends JFrame {
         JButton rock = new Button("바위");
         JButton paper = new Button("보");
         JButton scissors = new Button("가위");
+
         public void rps_click() {
             rock.addActionListener(new ActionListener() {
                 @Override
-                public void actionPerformed(ActionEvent e){
+                public void actionPerformed(ActionEvent e) {
                     System.out.println("바위");
                 }
             });
             paper.addActionListener(new ActionListener() {
                 @Override
-                public void actionPerformed(ActionEvent e){
-                    System.out.println("바위");
+                public void actionPerformed(ActionEvent e) {
+                    System.out.println("보");
                 }
             });
             scissors.addActionListener(new ActionListener() {
                 @Override
-                public void actionPerformed(ActionEvent e){
-                    System.out.println("바위");
+                public void actionPerformed(ActionEvent e) {
+                    System.out.println("가위");
                 }
             });
         }
-
 
     }
 
@@ -78,6 +78,6 @@ class Button extends JButton {
         super(str);
         setFont(getFont().deriveFont(20.0f));
         setBackground(Color.white);
-        setPreferredSize(new Dimension(80, 80));
+        setMaximumSize(new Dimension(80, 80));
     }
 }

@@ -4,6 +4,7 @@ import javax.swing.*;
 public class RockPaperScissors extends JFrame {
     private JPanel titlePan, contentPan, resultPan, buttonPan, retryPan, labelPan;
     Util.RPS_Util util = new Util.RPS_Util();
+
     public RockPaperScissors(String str) {
         util.rps_click();
         JLabel gameName = new JLabel(str, SwingConstants.CENTER);
@@ -31,14 +32,6 @@ public class RockPaperScissors extends JFrame {
         resultPan.add(resultBox("TEST"));
         resultPan.setPreferredSize(new Dimension(Define.MAX_WIDTH, 70));
 
-        buttonPan = new JPanel();
-        buttonPan.setBackground(Color.cyan);
-        buttonPan.add(util.scissors);
-        buttonPan.add(Box.createHorizontalStrut(30));
-        buttonPan.add(button("바위"));
-        buttonPan.add(Box.createHorizontalStrut(30));
-        buttonPan.add(button("보"));
-
         retryPan = Retry();
 
         Main_Window.mainPan.setLayout(new BoxLayout(Main_Window.mainPan, BoxLayout.Y_AXIS));
@@ -47,7 +40,7 @@ public class RockPaperScissors extends JFrame {
         Main_Window.mainPan.add(Box.createVerticalStrut(20));
         Main_Window.mainPan.add(contentPan);
         Main_Window.mainPan.add(resultPan);
-        Main_Window.mainPan.add(buttonPan);
+        Main_Window.mainPan.add(RpsButtonPan());
         // Main_Window.mainPan.add(pcNuser);
     }
 
@@ -77,18 +70,21 @@ public class RockPaperScissors extends JFrame {
         return label;
     }
 
-    public JButton button(String str) {
-        JButton button = new JButton(str);
-        button.setFont(button.getFont().deriveFont(20.0f));
-        button.setBackground(Color.white);
-        button.setPreferredSize(new Dimension(80, 80));
-        return button;
+    public JPanel RpsButtonPan() {
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
+        panel.setPreferredSize(new Dimension(Define.MAX_WIDTH, 70));
+        panel.add(util.scissors);
+        panel.add(Box.createHorizontalStrut(30));
+        panel.add(util.rock);
+        panel.add(Box.createHorizontalStrut(30));
+        panel.add(util.paper);
+        return panel;
     }
 
     public JPanel Retry() {
         JPanel panel = new JPanel();
         JButton retry = new JButton("다시하기");
-        JLabel or = new JLabel("또는");
         JButton exit = new JButton("나가기");
 
         panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
