@@ -41,7 +41,6 @@ public class RockPaperScissors extends JFrame {
         Main_Window.mainPan.add(contentPan);
         Main_Window.mainPan.add(resultPan);
         Main_Window.mainPan.add(RpsButtonPan());
-        // Main_Window.mainPan.add(pcNuser);
     }
 
     public Box Con(String str) {
