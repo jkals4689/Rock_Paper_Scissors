@@ -4,7 +4,6 @@ import javax.swing.*;
 public class RockPaperScissors extends JFrame {
     private JPanel contentPan, resultPan, buttonPan, retryPan, labelPan;
     Util.RPS_Util util = new Util.RPS_Util();
-    JLabel rps = new RPS_Random(false);
 
     JButton rock = util.rock;
     JButton paper = util.paper;
@@ -45,7 +44,7 @@ public class RockPaperScissors extends JFrame {
         Main_Window.mainPan.add(Box.createVerticalStrut(20));
         Main_Window.mainPan.add(contentPan);
         Main_Window.mainPan.add(resultPan);
-        Main_Window.mainPan.add(new RpsButtonPan(3));
+        Main_Window.mainPan.add(new RpsButtonPan(1));
     }
 
     public Box Con(String str) {
@@ -84,56 +83,4 @@ public class RockPaperScissors extends JFrame {
         return color;
     }
 
-    public JPanel Retry() {
-        JPanel panel = new JPanel();
-        JButton[] btn = new JButton[2];
-        String str[] = { "다시하기", "나가기" };
-        for (int i = 0; i < 2; i++) {
-            btn[i] = new JButton("" + str[i]);
-            btn[i].setMaximumSize(new Dimension(100, 40));
-            btn[i].addActionListener(util);
-        }
-
-        panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
-        panel.setPreferredSize(new Dimension(Define.MAX_WIDTH, 70));
-
-        panel.add(btn[0]);
-        panel.add(Box.createHorizontalStrut(50));
-        panel.add(btn[1]);
-        return panel;
-    }
-
-}
-
-class RpsButtonPan extends JPanel {
-    Util.RPS_Util util = new Util.RPS_Util();
-    J
-    public RpsButtonPan(int num) {
-        JButton btn;
-        setPreferredSize(new Dimension(Define.MAX_WIDTH, 70));
-        setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-        if (num == 1) {
-            btn = new JButton("준비 완료");
-            btn.addActionListener(util);
-            removeAll();
-            add(btn);
-            updateUI();
-        }
-        if (num == 2) {
-            removeAll();
-            add(scissors);
-            add(Box.createHorizontalStrut(30));
-            add(rock);
-            add(Box.createHorizontalStrut(30));
-            add(paper);
-            updateUI();
-
-        }
-        if (num == 3) {
-            removeAll();
-            add(Retry());
-            updateUI();
-        }
-
-    }
 }

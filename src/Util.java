@@ -29,29 +29,6 @@ public class Util extends JFrame {
             } else if (e.getSource() == mJB) {
                 System.out.println("묵 찌 빠");
             }
-            // }
-            // public void main_click() {
-            // rpS.addActionListener(new ActionListener() {
-
-            // @Override
-            // public void actionPerformed(ActionEvent e) {
-            // setVisible(false);
-            // Main_Window.mainPan.removeAll();
-            // new RockPaperScissors("가위 바위 보");
-            // Main_Window.mainPan.updateUI();
-            // }
-
-            // });
-
-            // mJB.addActionListener(new ActionListener() {
-
-            // @Override
-            // public void actionPerformed(ActionEvent e) {
-            // setVisible(false);
-            // }
-
-            // });
-            // }
         }
     }
 
@@ -59,53 +36,33 @@ public class Util extends JFrame {
         JButton rock = new Button("바위");
         JButton paper = new Button("보");
         JButton scissors = new Button("가위");
+        int num;
 
         public void actionPerformed(ActionEvent e) {
             JButton btn = (JButton) e.getSource();
-            if (e.getSource() == rock) {
-                System.out.println("바위");
-            } else if (e.getSource() == paper) {
-                System.out.println("보");
-            } else if (e.getSource() == scissors) {
-                System.out.println("가위");
-            }
             if (btn.getActionCommand().equals("준비 완료")) {
                 System.out.println("I'm Ready");
+                new RpsButtonPan(2);
             }
-            if (btn.getActionCommand().equals("다시하기")) {
-                System.out.println("Retry");
-            } else if (btn.getActionCommand().equals("나가기"))
-                System.out.println("Exit");
+
+            if (e.getSource() == rock) {
+                System.out.println("바위");
+                new RpsButtonPan(2);
+            } else if (e.getSource() == paper) {
+                System.out.println("보");
+                num = 3;
+            } else if (e.getSource() == scissors) {
+                System.out.println("가위");
+                num = 3;
+
+                if (btn.getActionCommand().equals("다시하기")) {
+                    System.out.println("Retry");
+                    num = 1;
+                } else if (btn.getActionCommand().equals("나가기"))
+                    System.out.println("Exit");
+            }
         }
-
-        // public void rps_click() {
-
-        // rock.addActionListener(new ActionListener() {
-        // @Override
-        // public void actionPerformed(ActionEvent e) {
-        // System.out.println("바위");
-
-        // if(e.getSource() == rock){
-
-        // }else if(e.getSource() == paper)
-        // }
-        // });
-        // paper.addActionListener(new ActionListener() {
-        // @Override
-        // public void actionPerformed(ActionEvent e) {
-        // System.out.println("보");
-        // }
-        // });
-        // scissors.addActionListener(new ActionListener() {
-        // @Override
-        // public void actionPerformed(ActionEvent e) {
-        // System.out.println("가위");
-        // }
-        // });
-        // }
-
     }
-
 }
 
 class Button extends JButton {
