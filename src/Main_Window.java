@@ -13,10 +13,15 @@ public class Main_Window extends JFrame {
     Util.Main_Util util = new Util.Main_Util();
     JLabel sel_Game = new JLabel("Select Game");
 
+    JButton rpS = util.rpS;
+    JButton mJB = util.mJB;
+
     public Main_Window(String str) {
         super(str);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        util.main_click();
+        
+        rpS.addActionListener(util);
+        mJB.addActionListener(util);
 
         Box buttonBox = Box.createHorizontalBox();
         Box labelBox = Box.createHorizontalBox();
@@ -24,9 +29,9 @@ public class Main_Window extends JFrame {
         sel_Game.setFont(sel_Game.getFont().deriveFont(30.0f));
         labelBox.add(sel_Game);
 
-        buttonBox.add(util.rpS).setMaximumSize(new Dimension(150, 150));
+        buttonBox.add(rpS).setMaximumSize(new Dimension(150, 150));
         buttonBox.add(Box.createHorizontalStrut(50));
-        buttonBox.add(util.mJB).setMaximumSize(new Dimension(150, 150));
+        buttonBox.add(mJB).setMaximumSize(new Dimension(150, 150));
 
         mainPan.setLayout(new BoxLayout(mainPan, BoxLayout.Y_AXIS));
         mainPan.add(Box.createVerticalStrut(50));

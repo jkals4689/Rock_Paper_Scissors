@@ -15,59 +15,94 @@ public class Util extends JFrame {
         new RPS_Util();
     }
 
-    public static class Main_Util extends JFrame {
+    public static class Main_Util extends JFrame implements ActionListener {
         JButton rpS = new JButton("가위 바위 보");
         JButton mJB = new JButton("묵 찌 빠");
 
-        public void main_click() {
-            rpS.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+            if (e.getSource() == rpS) {
+                System.out.println("가위 바위 보");
+                Main_Window.mainPan.removeAll();
+                new RockPaperScissors("가위 바위 보");
+                Main_Window.mainPan.updateUI();
 
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    setVisible(false);
-                    Main_Window.mainPan.removeAll();
-                    new RockPaperScissors("가위 바위 보");
-                    Main_Window.mainPan.updateUI();
-                }
+            } else if (e.getSource() == mJB) {
+                System.out.println("묵 찌 빠");
+            }
+            // }
+            // public void main_click() {
+            // rpS.addActionListener(new ActionListener() {
 
-            });
+            // @Override
+            // public void actionPerformed(ActionEvent e) {
+            // setVisible(false);
+            // Main_Window.mainPan.removeAll();
+            // new RockPaperScissors("가위 바위 보");
+            // Main_Window.mainPan.updateUI();
+            // }
 
-            mJB.addActionListener(new ActionListener() {
+            // });
 
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    setVisible(false);
-                }
+            // mJB.addActionListener(new ActionListener() {
 
-            });
+            // @Override
+            // public void actionPerformed(ActionEvent e) {
+            // setVisible(false);
+            // }
+
+            // });
+            // }
         }
     }
 
-    public static class RPS_Util extends JFrame {
+    public static class RPS_Util extends JFrame implements ActionListener {
         JButton rock = new Button("바위");
         JButton paper = new Button("보");
         JButton scissors = new Button("가위");
 
-        public void rps_click() {
-            rock.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    System.out.println("바위");
-                }
-            });
-            paper.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    System.out.println("보");
-                }
-            });
-            scissors.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    System.out.println("가위");
-                }
-            });
+        public void actionPerformed(ActionEvent e) {
+            JButton btn = (JButton) e.getSource();
+            if (e.getSource() == rock) {
+                System.out.println("바위");
+            } else if (e.getSource() == paper) {
+                System.out.println("보");
+            } else if (e.getSource() == scissors) {
+                System.out.println("가위");
+            }
+            if (btn.getActionCommand().equals("준비 완료")) {
+                System.out.println("I'm Ready");
+            }
+            if (btn.getActionCommand().equals("다시하기")) {
+                System.out.println("Retry");
+            } else if (btn.getActionCommand().equals("나가기"))
+                System.out.println("Exit");
         }
+
+        // public void rps_click() {
+
+        // rock.addActionListener(new ActionListener() {
+        // @Override
+        // public void actionPerformed(ActionEvent e) {
+        // System.out.println("바위");
+
+        // if(e.getSource() == rock){
+
+        // }else if(e.getSource() == paper)
+        // }
+        // });
+        // paper.addActionListener(new ActionListener() {
+        // @Override
+        // public void actionPerformed(ActionEvent e) {
+        // System.out.println("보");
+        // }
+        // });
+        // scissors.addActionListener(new ActionListener() {
+        // @Override
+        // public void actionPerformed(ActionEvent e) {
+        // System.out.println("가위");
+        // }
+        // });
+        // }
 
     }
 
