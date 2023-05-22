@@ -36,13 +36,13 @@ public class Util extends JFrame {
         JButton rock = new Button("바위");
         JButton paper = new Button("보");
         JButton scissors = new Button("가위");
-        int num;
+        int num = 1;
 
         public void actionPerformed(ActionEvent e) {
             JButton btn = (JButton) e.getSource();
             if (btn.getActionCommand().equals("준비 완료")) {
                 System.out.println("I'm Ready");
-                new RpsButtonPan(2);
+                num = 2;
             }
 
             if (e.getSource() == rock) {

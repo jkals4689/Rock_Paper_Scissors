@@ -38,13 +38,15 @@ public class RockPaperScissors extends JFrame {
         resultPan.add(TextBox("TEST"));
         resultPan.setPreferredSize(new Dimension(Define.MAX_WIDTH, 70));
 
+        Main_Window.mainPan.removeAll();
         Main_Window.mainPan.setLayout(new BoxLayout(Main_Window.mainPan, BoxLayout.Y_AXIS));
         Main_Window.mainPan.add(Box.createVerticalStrut(30));
         Main_Window.mainPan.add(titlePan);
         Main_Window.mainPan.add(Box.createVerticalStrut(20));
         Main_Window.mainPan.add(contentPan);
         Main_Window.mainPan.add(resultPan);
-        Main_Window.mainPan.add(new RpsButtonPan(1));
+        Main_Window.mainPan.add(new RpsButtonPan(util.num));
+        Main_Window.mainPan.updateUI();
     }
 
     public Box Con(String str) {
