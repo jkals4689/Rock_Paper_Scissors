@@ -40,6 +40,8 @@ public class Util extends JFrame {
 
         public void actionPerformed(ActionEvent e) {
             JButton btn = (JButton) e.getSource();
+            JPanel pan = (JPanel)e.getSource();
+            System.out.println(pan);
             if (btn.getActionCommand().equals("준비 완료")) {
                 System.out.println("I'm Ready");
                 num = 2;
