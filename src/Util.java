@@ -1,5 +1,6 @@
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import javax.swing.JButton;
 
 import java.awt.Color;
@@ -22,9 +23,10 @@ public class Util extends JFrame {
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == rpS) {
                 System.out.println("가위 바위 보");
-                Main_Window.mainPan.removeAll();
-                new RockPaperScissors("가위 바위 보");
-                Main_Window.mainPan.updateUI();
+                
+                // Main_Window.mainPan.removeAll();
+                // new RockPaperScissors("가위 바위 보");
+                // Main_Window.mainPan.updateUI();
 
             } else if (e.getSource() == mJB) {
                 System.out.println("묵 찌 빠");
@@ -44,6 +46,7 @@ public class Util extends JFrame {
             System.out.println(pan);
             if (btn.getActionCommand().equals("준비 완료")) {
                 System.out.println("I'm Ready");
+                System.out.println();
                 num = 2;
             }
 
@@ -57,12 +60,16 @@ public class Util extends JFrame {
                 System.out.println("가위");
                 num = 3;
 
-                if (btn.getActionCommand().equals("다시하기")) {
-                    System.out.println("Retry");
-                    num = 1;
-                } else if (btn.getActionCommand().equals("나가기"))
-                    System.out.println("Exit");
             }
+
+            if (btn.getActionCommand().equals("다시하기")) {
+                System.out.println("Retry");
+                num = 1;
+            } else if (btn.getActionCommand().equals("나가기"))
+                System.out.println("Exit");
+        }
+        public void Panchange(String panname) {
+
         }
     }
 }

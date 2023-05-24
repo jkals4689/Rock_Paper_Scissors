@@ -15,38 +15,37 @@ public class RockPaperScissors extends JFrame {
         paper.addActionListener(util);
         scissors.addActionListener(util);
 
-        // 가위바위보 게임 이름
+        Main_Window.mainPan.removeAll();
+        Main_Window.mainPan.setLayout(new BoxLayout(Main_Window.mainPan, BoxLayout.Y_AXIS));
+        Main_Window.mainPan.add(Box.createVerticalStrut(30));
+        Main_Window.mainPan.add(titlePan(str));
+        Main_Window.mainPan.add(Box.createVerticalStrut(20));
+        Main_Window.mainPan.add(contentPan());
+        Main_Window.mainPan.add(resultPan());
+        Main_Window.mainPan.add(new RpsButtonPan(util.num));
+        Main_Window.mainPan.updateUI();
+    }
+
+    public JPanel titlePan(String str) {
         JLabel gameName = new JLabel(str, SwingConstants.CENTER);
         gameName.setFont(new Font("HY견고딕", Font.BOLD, 30));
         gameName.setForeground(new Color(41, 158, 57));
         gameName.setBackground(Color.WHITE);
         gameName.setOpaque(true);
 
-        JPanel titlePan = new JPanel();
-        titlePan.setBackground(Color.RED);
-        titlePan.add(gameName).setPreferredSize(new Dimension(230, 50));
+        JPanel panel = new JPanel();
+        panel.setBackground(Color.RED);
+        panel.add(gameName).setPreferredSize(new Dimension(230, 50));
+        return panel;
+    }
 
-        // 컴퓨터 유저 텍스트
-        contentPan = new JPanel();
-        contentPan.setBackground(Color.BLUE);
-        contentPan.add(Con("USER")); // 유저 박스
-        contentPan.add(Box.createHorizontalStrut(100));
-        contentPan.add(Con("PC")); // 컴퓨터 박스
-
-        resultPan = new JPanel();
-        resultPan.setBackground(Color.YELLOW);
-        resultPan.add(TextBox("TEST"));
-        resultPan.setPreferredSize(new Dimension(Define.MAX_WIDTH, 70));
-
-        Main_Window.mainPan.removeAll();
-        Main_Window.mainPan.setLayout(new BoxLayout(Main_Window.mainPan, BoxLayout.Y_AXIS));
-        Main_Window.mainPan.add(Box.createVerticalStrut(30));
-        Main_Window.mainPan.add(titlePan);
-        Main_Window.mainPan.add(Box.createVerticalStrut(20));
-        Main_Window.mainPan.add(contentPan);
-        Main_Window.mainPan.add(resultPan);
-        Main_Window.mainPan.add(new RpsButtonPan(util.num));
-        Main_Window.mainPan.updateUI();
+    public JPanel contentPan() {
+        JPanel panel = new JPanel();
+        panel.setBackground(Color.BLUE);
+        panel.add(Con("USER")); // 유저 박스
+        panel.add(Box.createHorizontalStrut(100));
+        panel.add(Con("PC")); // 컴퓨터 박스
+        return panel;
     }
 
     public Box Con(String str) {
@@ -67,7 +66,13 @@ public class RockPaperScissors extends JFrame {
         Container.setOpaque(true);
         return Container;
     }
-
+    public JPanel resultPan() {
+        JPanel panel = new JPanel();
+        panel.setBackground(Color.YELLOW);
+        panel.add(TextBox("TEST"));
+        panel.setPreferredSize(new Dimension(Define.MAX_WIDTH, 70)); 
+        return panel;
+    }
     public JLabel TextBox(String str) {
         JLabel label = new JLabel(str, SwingConstants.CENTER);
         label.setFont(new Font("HY견고딕", Font.PLAIN, 40));

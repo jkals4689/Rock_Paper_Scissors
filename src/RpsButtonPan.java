@@ -39,7 +39,15 @@ public class RpsButtonPan extends JPanel {
         }
 
     }
-
+    public JPanel Ready() {
+        JPanel panel = new JPanel();
+        btn = new JButton("준비완료");
+        btn.addActionListener(util);
+        panel.removeAll();
+        panel.add(btn);
+        panel.updateUI();
+        return panel;
+    }
     public JPanel Retry() {
         JPanel panel = new JPanel();
         JButton[] btn = new JButton[2];
