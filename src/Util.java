@@ -24,9 +24,9 @@ public class Util extends JFrame {
             if (e.getSource() == rpS) {
                 System.out.println("가위 바위 보");
                 
-                // Main_Window.mainPan.removeAll();
-                // new RockPaperScissors("가위 바위 보");
-                // Main_Window.mainPan.updateUI();
+                Main_Window.mainPan.removeAll();
+                new RockPaperScissors_old("가위 바위 보");
+                Main_Window.mainPan.updateUI();
 
             } else if (e.getSource() == mJB) {
                 System.out.println("묵 찌 빠");
@@ -46,8 +46,7 @@ public class Util extends JFrame {
             System.out.println(pan);
             if (btn.getActionCommand().equals("준비 완료")) {
                 System.out.println("I'm Ready");
-                System.out.println();
-                num = 2;
+                
             }
 
             if (e.getSource() == rock) {
