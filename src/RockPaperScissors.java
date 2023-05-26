@@ -3,13 +3,11 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class RockPaperScissors extends JPanel implements ActionListener {
-    private Main.Display_Panel win;
+public class RockPaperScissors extends JPanel {
     private JButton btn = new JButton("준비 완료");
     private Panels pan = new Panels();
 
-    public RockPaperScissors(String gamename, Main.Display_Panel win) {
-        this.win = win;
+    public RockPaperScissors(String gamename) {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         add(Box.createVerticalStrut(30));
         add(pan.titlePan(gamename));
@@ -19,8 +17,8 @@ public class RockPaperScissors extends JPanel implements ActionListener {
 
     }
 
-    public void actionPerformed(ActionEvent e) {
-        if (btn.getActionCommand().equals("준비 완료"))
-            win.change("MainWindow");
-    }
+    // public void actionPerformed(ActionEvent e) {
+    //     if (btn.getActionCommand().equals("준비 완료"))
+    //         win.change("MainWindow");
+    // }
 }
