@@ -9,20 +9,38 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+class Display_Panel extends JFrame {
+    public MainWindow mainWindow = null;
+    public RockPaperScissors rps1 = null;
+
+    public void change(String panelname) {
+        if (panelname.equals("RPS1")) {
+            getContentPane().removeAll();
+            getContentPane().add(rps1);
+            revalidate();
+            repaint();
+        } else if (panelname.equals("MainWindow")) {
+            getContentPane().removeAll();
+            getContentPane().add(mainWindow);
+            revalidate();
+            repaint();
+        }
+    }
+}
+
 public class Util extends JFrame {
     JFrame frame = new JFrame();
     public MainWindow mainWindow = new MainWindow();
-    public RockPaperScissors rps = new RockPaperScissors(null);
 
     public void Util() {
         new Main_Util();
     }
 
     static class Main_Util extends JFrame implements ActionListener {
-        RockPaperScissors rps = new RockPaperScissors(null);
         public void actionPerformed(ActionEvent e) {
             JButton btn = (JButton) e.getSource();
             if (btn.getActionCommand().equals("가위 바위 보")) {
+                RockPaperScissors rps = new RockPaperScissors("가위 바위 보");
                 System.out.println("가위 바위 보");
                 getContentPane().removeAll();
                 getContentPane().add(rps);
@@ -89,7 +107,6 @@ public class Util extends JFrame {
     // }
     // }
 }
-
 
 // class Button extends JButton {
 // public Button(String str) {

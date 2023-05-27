@@ -4,7 +4,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 public class MainWindow extends JPanel {
-    public JButton btn1 = new JButton("가위 바위 보");
+    private JButton btn1 = new JButton("가위 바위 보");
     private JButton btn2 = new JButton("묵 찌 빠");
     private JLabel sel_Game = new JLabel("게임을 선택하시오");
     Util.Main_Util util = new Util.Main_Util();
