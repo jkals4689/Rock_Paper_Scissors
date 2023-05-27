@@ -15,6 +15,7 @@ class Display_Panel extends JFrame {
 
     public void change(String panelname) {
         if (panelname.equals("RPS1")) {
+            rps1 = new RockPaperScissors("가위 바위 보");
             getContentPane().removeAll();
             getContentPane().add(rps1);
             revalidate();
@@ -31,21 +32,19 @@ class Display_Panel extends JFrame {
 public class Util extends JFrame {
     JFrame frame = new JFrame();
     public MainWindow mainWindow = new MainWindow();
+    Display_Panel win = new Display_Panel();
 
     public void Util() {
         new Main_Util();
     }
 
     static class Main_Util extends JFrame implements ActionListener {
+        Display_Panel win = new Display_Panel();
         public void actionPerformed(ActionEvent e) {
             JButton btn = (JButton) e.getSource();
             if (btn.getActionCommand().equals("가위 바위 보")) {
-                RockPaperScissors rps = new RockPaperScissors("가위 바위 보");
                 System.out.println("가위 바위 보");
-                getContentPane().removeAll();
-                getContentPane().add(rps);
-                revalidate();
-                repaint();
+                win.change("RPS1");
             } else if (btn.getActionCommand().equals("묵 찌 빠"))
                 System.out.println("묵 찌 빠");
         }
