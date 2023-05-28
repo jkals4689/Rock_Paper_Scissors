@@ -2,9 +2,11 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
+import javax.print.event.PrintServiceAttributeEvent;
 import javax.swing.*;
 
 import java.util.Random;
+import java.util.zip.DeflaterInputStream;
 
 class Define {
     public static final int MAX_WIDTH = 500;
@@ -43,11 +45,61 @@ class MainWindow extends JPanel {
             }
         }
     }
+}
+
+class RpsButtonPan extends JPanel implements ActionListener {
+    private JButton ready = new JButton("준비 완료");
+    private JButton rpsBtnp[] = new JButton[3];
+    private JButton rtNex[] = new JButton[2];
+    private String[] str = { "가위", "바위", "보" };
+    private String[] str2 = { "다시하기", "나가기" };
+
+    public RpsButtonPan(String str) {
+        if (str.equals("ready")) {
+            ready.setPreferredSize(new Dimension(100, 40));
+            add(ready);
+        } else if (str.equals("start")) {
+            setLayout(new GridLayout(0, 3, 50, 50));
+            RpsButton();
+        } else if (str.equals("end")) {
+            Retry();
+        }
+        setMaximumSize(new Dimension(Define.MAX_WIDTH, 70));
+        setBackground(Color.black);
+    }
+
+    public void RpsButton() {
+        for (int i = 0; i < rpsBtnp.length; i++) {
+            rpsBtnp[i] = new JButton(str[i]);
+            rpsBtnp[i].addActionListener(this);
+            rpsBtnp[i].setFont(new Font("HY견고딕", Font.PLAIN, 20));
+            rpsBtnp[i].setPreferredSize(new Dimension(100, 40));
+        }
+
+        add(rpsBtnp[0]);
+        add(rpsBtnp[1]);
+        add(rpsBtnp[2]);
+    }
+
+    public void Retry() {
+        for (int i = 0; i < rtNex.length; i++) {
+            rtNex[i] = new JButton(str2[i]);
+            rtNex[i].setPreferredSize(new Dimension(100, 40));
+        }
+        add(rtNex[0]);
+        add(Box.createHorizontalStrut(50));
+        add(rtNex[1]);
+    }
+
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == rpsBtnp[0])
+            System.out.println(e.getSource());
+    }
 
 }
 
 class RockPaperScissors extends JPanel {
-    private JButton btn = new JButton("준비 완료");
+    private RpsButtonPan rpsButtonPan = null;
     private JLabel title;
     private JLabel result;
     private JPanel content = new JPanel();
@@ -70,6 +122,7 @@ class RockPaperScissors extends JPanel {
 
         // container.setPreferredSize(new Dimension(150, 150));
         container.setAlignmentX(CENTER_ALIGNMENT);
+        container.setPreferredSize(new Dimension(150, 150));
         container.setMaximumSize(new Dimension(150, 150));
         container.setBackground(Color.yellow);
         container.setOpaque(true);
@@ -94,13 +147,13 @@ class RockPaperScissors extends JPanel {
     public RockPaperScissors(Display_Panel win, String gamename) {
         this.win = win;
         this.title = new JLabel(gamename);
-
+        rpsButtonPan = new RpsButtonPan("start");
         SetTitle(gamename);
 
         content.setBackground(Color.blue);
         content.setMaximumSize(new Dimension(Define.MAX_WIDTH, 200));
         content.add(SetCon("User"));
-        content.add(Box.createHorizontalStrut(150));
+        content.add(Box.createHorizontalStrut(100));
         content.add(SetCon("Computer"));
 
         result = new JLabel("Are U Ready?");
@@ -108,25 +161,15 @@ class RockPaperScissors extends JPanel {
         result.setForeground(Color.white);
         result.setAlignmentX(CENTER_ALIGNMENT);
 
-        btn.setAlignmentX(CENTER_ALIGNMENT);
-
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         add(Box.createVerticalStrut(30));
         add(title);
         add(Box.createVerticalStrut(30));
         add(content);
+        add(Box.createVerticalStrut(20));
         add(result);
-        add(btn);
-
-        btn.addActionListener(new MyActionListener());
-    }
-
-    class MyActionListener implements ActionListener {
-        public void actionPerformed(ActionEvent e) {
-            if (e.getSource() == btn) {
-                win.change("MainWindow");
-            }
-        }
+        add(Box.createVerticalStrut(20));
+        add(rpsButtonPan);
     }
 }
 
@@ -159,7 +202,6 @@ public class Main extends JFrame {
 
     public static void main(String[] args) {
         Display_Panel win = new Display_Panel();
-        win.setLayout(new FlowLayout(FlowLayout.CENTER));
         win.setTitle("미니 게임");
         win.mainWindow = new MainWindow(win);
         win.rps1 = new RockPaperScissors(win, "가위 바위 보");
