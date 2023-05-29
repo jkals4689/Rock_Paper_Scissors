@@ -1,16 +1,30 @@
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-
-import javax.print.event.PrintServiceAttributeEvent;
+import javax.swing.ImageIcon;
 import javax.swing.*;
 
 import java.util.Random;
-import java.util.zip.DeflaterInputStream;
 
 class Define {
     public static final int MAX_WIDTH = 500;
     public static final int MAX_HEIGHT = 500;
+    public static final int SCISSORS = 0;
+    public static final int ROCK = 1;
+    public static final int PAPER = 2;
+    public static final int CLEAR = -1;
+    public static final int NULL = -2;
+    public final ImageIcon[] icon = new ImageIcon[3];
+    private final String[] str = { "Scissors", "Rock", "Paper" };
+
+    public void setIcon() {
+        for (int i = 0; i < str.length; i++) {
+            icon[i] = new ImageIcon("src\\img\\" + str[(str.length-1) - i] + ".jpg");
+            Image img = icon[i].getImage();
+            Image changeImg = img.getScaledInstance(80, 80, Image.SCALE_SMOOTH);
+            icon[i] = new ImageIcon(changeImg);
+        }
+    }
 }
 
 class MainWindow extends JPanel {
@@ -20,8 +34,8 @@ class MainWindow extends JPanel {
 
     public MainWindow(Display_Panel win) {
         this.win = win;
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         JLabel selGame = new JLabel("게임을 선택하시오");
         selGame.setAlignmentX(Component.CENTER_ALIGNMENT);
         selGame.setFont(selGame.getFont().deriveFont(30.0f));
@@ -51,59 +65,200 @@ class RpsButtonPan extends JPanel implements ActionListener {
     private JButton ready = new JButton("준비 완료");
     private JButton rpsBtnp[] = new JButton[3];
     private JButton rtNex[] = new JButton[2];
-    private String[] str = { "가위", "바위", "보" };
+    private String[] str = { "Scissors", "Rock", "Paper" };
     private String[] str2 = { "다시하기", "나가기" };
+    private Random random = new Random();
+    private ContentPanel content;
+    private Display_Panel win;
 
-    public RpsButtonPan(String str) {
+    public RpsButtonPan(Display_Panel win, ContentPanel content) {
+        this.win = win;
+        this.content = content;
+        setLayout(new FlowLayout(FlowLayout.CENTER, 50, 0));
+        setMaximumSize(new Dimension(Define.MAX_WIDTH, 100));
+        this.change("ready");
+    }
+
+    private void change(String str) {
+
         if (str.equals("ready")) {
-            ready.setPreferredSize(new Dimension(100, 40));
+            removeAll();
+            ready.addActionListener(this);
+            ready.setFont(new Font("HY견고딕", Font.PLAIN, 20));
+            ready.setPreferredSize(new Dimension(150, 40));
             add(ready);
+            updateUI();
         } else if (str.equals("start")) {
-            setLayout(new GridLayout(0, 3, 50, 50));
+            removeAll();
             RpsButton();
+            updateUI();
         } else if (str.equals("end")) {
+            removeAll();
             Retry();
+            updateUI();
         }
-        setMaximumSize(new Dimension(Define.MAX_WIDTH, 70));
-        setBackground(Color.black);
     }
 
     public void RpsButton() {
         for (int i = 0; i < rpsBtnp.length; i++) {
-            rpsBtnp[i] = new JButton(str[i]);
+            rpsBtnp[i] = new JButton("");
+            rpsBtnp[i].setIcon(win.util.icon[i]);
             rpsBtnp[i].addActionListener(this);
             rpsBtnp[i].setFont(new Font("HY견고딕", Font.PLAIN, 20));
-            rpsBtnp[i].setPreferredSize(new Dimension(100, 40));
+            rpsBtnp[i].setPreferredSize(new Dimension(80, 80));
+            add(rpsBtnp[i]);
         }
-
-        add(rpsBtnp[0]);
-        add(rpsBtnp[1]);
-        add(rpsBtnp[2]);
     }
 
     public void Retry() {
         for (int i = 0; i < rtNex.length; i++) {
             rtNex[i] = new JButton(str2[i]);
-            rtNex[i].setPreferredSize(new Dimension(100, 40));
+            rtNex[i].addActionListener(this);
+            rtNex[i].setFont(new Font("HY견고딕", Font.PLAIN, 20));
+            rtNex[i].setPreferredSize(new Dimension(150, 40));
+            add(rtNex[i]);
         }
-        add(rtNex[0]);
-        add(Box.createHorizontalStrut(50));
-        add(rtNex[1]);
+    }
+
+    public void result(int user) {
+        int com = random.nextInt(3);
+        String str[] = { "Scissors", "Rock", "Paper" };
+
+        System.out.println("user : " + user + " com : " + com);
+        content.setCon(user, com);
+        if (user == com) {
+            System.out.println("Tie.");
+            win.setLabel("비겼습니다");
+            this.change("end");
+        } else if (user == 0 && com == 1 || user == 1 && com == 2 || user == 2 && com == 0) {
+            System.out.println("Lose.");
+            win.setLabel("당신이 졌습니다");
+            this.change("end");
+        } else if (user == 0 && com == 2 || user == 1 && com == 0 || user == 2 && com == 1) {
+            System.out.println("Win.");
+            win.setLabel("당신이 이겼습니다");
+            this.change("end");
+        }
     }
 
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == rpsBtnp[0])
-            System.out.println(e.getSource());
+        if (e.getSource() == ready) {
+            System.out.println("Ready");
+            win.setLabel("선택 하세요");
+            this.change("start");
+        }
+
+        if (e.getSource() == rpsBtnp[0]) {
+            System.out.println("Scissors");
+            result(Define.SCISSORS);
+        } else if (e.getSource() == rpsBtnp[1]) {
+            System.out.println("Rock");
+            result(Define.ROCK);
+        } else if (e.getSource() == rpsBtnp[2]) {
+            System.out.println("Paper");
+            result(Define.PAPER);
+        }
+
+        if (e.getSource() == rtNex[0]) {
+            System.out.println("Retry");
+            win.setLabel("준비 되셨습니까?");
+            content.setCon(Define.CLEAR, Define.CLEAR);
+            this.change("ready");
+        } else if (e.getSource() == rtNex[1]) {
+            System.out.println("Exit");
+            win.change("MainWindow");
+        }
     }
 
+}
+
+class ContentPanel extends JPanel {
+    private Box user;
+    private Box computer;
+    private JLabel iconlabel = new JLabel("");
+    private Display_Panel win;
+
+    public void setCon(int user, int com) {
+        this.user = Con("User", user);
+        this.computer = Con("Computer", com);
+
+        removeAll();
+        add(this.user);
+        add(Box.createHorizontalStrut(100));
+        add(this.computer);
+        updateUI();
+    }
+
+    private Box box(int number) {
+        Box box = Box.createHorizontalBox();
+
+        if (number == Define.ROCK) {
+            System.out.println("Rock");
+            iconlabel.setIcon(win.util.icon[Define.ROCK]);
+            box.add(iconlabel);
+        } else if (number == Define.SCISSORS) {
+            System.out.println("Scissors");
+            iconlabel.setIcon(win.util.icon[Define.SCISSORS]);
+            box.add(iconlabel);
+        } else if (number == Define.PAPER) {
+            System.out.println("Paper");
+            iconlabel.setIcon(win.util.icon[Define.PAPER]);
+            box.add(iconlabel);
+        } else if (number == Define.CLEAR) {
+            System.out.println("Clear");
+            iconlabel.setIcon(null);
+            iconlabel.setText("?");
+            box.add(iconlabel);
+        } else if (number == Define.NULL) {
+            System.out.println("null");
+            iconlabel = new JLabel("?", SwingConstants.CENTER);
+            box.add(iconlabel);
+        }
+
+        box.setBorder(BorderFactory.createBevelBorder(10));
+        box.setBackground(Color.white);
+        box.setMaximumSize(new Dimension(80, 80));
+        box.setPreferredSize(new Dimension(80, 80));
+        box.setOpaque(true);
+
+        return box;
+    }
+
+    private Box Con(String user, int num) {
+        Box container = Box.createVerticalBox();
+
+        container.setAlignmentX(CENTER_ALIGNMENT);
+        container.setPreferredSize(new Dimension(150, 150));
+        container.setMaximumSize(new Dimension(150, 150));
+
+        JLabel label = new JLabel(user, SwingConstants.CENTER);
+        label.setFont(label.getFont().deriveFont(25.0f));
+        label.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        Box box = box(num);
+
+        container.add(label);
+        container.add(Box.createVerticalStrut(10));
+        container.add(box);
+
+        return container;
+    }
+
+    public ContentPanel(Display_Panel win) {
+        this.win = win;
+
+        setMaximumSize(new Dimension(Define.MAX_WIDTH, 170));
+        setOpaque(true);
+
+        setCon(Define.NULL, Define.NULL);
+    }
 }
 
 class RockPaperScissors extends JPanel {
     private RpsButtonPan rpsButtonPan = null;
     private JLabel title;
-    private JLabel result;
-    private JPanel content = new JPanel();
-    private Display_Panel win;
+    public JLabel result = new JLabel("준비 되셨습니까?");
+    private ContentPanel content = null;
 
     final void SetTitle(String str) {
         title = new JLabel(str);
@@ -116,49 +271,15 @@ class RockPaperScissors extends JPanel {
         title.setOpaque(true);
     }
 
-    final Box SetCon(String str) {
-        Box container = Box.createVerticalBox();
-        Box box = Box.createHorizontalBox();
-
-        // container.setPreferredSize(new Dimension(150, 150));
-        container.setAlignmentX(CENTER_ALIGNMENT);
-        container.setPreferredSize(new Dimension(150, 150));
-        container.setMaximumSize(new Dimension(150, 150));
-        container.setBackground(Color.yellow);
-        container.setOpaque(true);
-
-        JLabel label = new JLabel(str, SwingConstants.CENTER);
-        label.setFont(label.getFont().deriveFont(25.0f));
-        label.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        box.setBorder(BorderFactory.createBevelBorder(10));
-        box.setBackground(Color.white);
-        box.setMaximumSize(new Dimension(80, 80));
-        box.setPreferredSize(new Dimension(80, 80));
-        box.setOpaque(true);
-
-        container.add(label);
-        container.add(Box.createVerticalStrut(10));
-        container.add(box);
-
-        return container;
-    }
-
     public RockPaperScissors(Display_Panel win, String gamename) {
-        this.win = win;
         this.title = new JLabel(gamename);
-        rpsButtonPan = new RpsButtonPan("start");
+        this.content = new ContentPanel(win);
+        this.rpsButtonPan = new RpsButtonPan(win, content);
+
         SetTitle(gamename);
 
-        content.setBackground(Color.blue);
-        content.setMaximumSize(new Dimension(Define.MAX_WIDTH, 200));
-        content.add(SetCon("User"));
-        content.add(Box.createHorizontalStrut(100));
-        content.add(SetCon("Computer"));
-
-        result = new JLabel("Are U Ready?");
         result.setFont(new Font("HY견고딕", Font.PLAIN, 40));
-        result.setForeground(Color.white);
+        result.setForeground(Color.black);
         result.setAlignmentX(CENTER_ALIGNMENT);
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -177,6 +298,11 @@ class Display_Panel extends JFrame {
     public MainWindow mainWindow = null;
     public RockPaperScissors rps1 = null;
     public RockPaperScissors rps2 = null;
+    public Define util = new Define();
+
+    public Display_Panel() {
+        util.setIcon();
+    }
 
     public void change(String panelname) {
         if (panelname.equals("MainWindow")) {
@@ -185,16 +311,22 @@ class Display_Panel extends JFrame {
             revalidate();
             repaint();
         } else if (panelname.equals("RPS1")) {
+            rps1 = new RockPaperScissors(this, "가위 바위 보");
             getContentPane().removeAll();
             getContentPane().add(rps1);
             revalidate();
             repaint();
         } else if (panelname.equals("RPS2")) {
+            rps2 = new RockPaperScissors(this, "묵 찌 빠");
             getContentPane().removeAll();
             getContentPane().add(rps2);
             revalidate();
             repaint();
         }
+    }
+
+    public void setLabel(String str) {
+        rps1.result.setText(str);
     }
 }
 
@@ -202,10 +334,9 @@ public class Main extends JFrame {
 
     public static void main(String[] args) {
         Display_Panel win = new Display_Panel();
+
         win.setTitle("미니 게임");
         win.mainWindow = new MainWindow(win);
-        win.rps1 = new RockPaperScissors(win, "가위 바위 보");
-        win.rps2 = new RockPaperScissors(win, "묵 찌 빠");
 
         win.add(win.mainWindow);
         win.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
