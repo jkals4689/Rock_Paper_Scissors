@@ -19,7 +19,7 @@ class Define {
 
     public void setIcon() {
         for (int i = 0; i < str.length; i++) {
-            icon[i] = new ImageIcon("src\\img\\" + str[(str.length-1) - i] + ".jpg");
+            icon[i] = new ImageIcon("src\\img\\" + str[(str.length - 1) - i] + ".jpg");
             Image img = icon[i].getImage();
             Image changeImg = img.getScaledInstance(80, 80, Image.SCALE_SMOOTH);
             icon[i] = new ImageIcon(changeImg);
@@ -27,7 +27,7 @@ class Define {
     }
 }
 
-class MainWindow extends JPanel {
+class MainWindow extends JPanel implements ActionListener {
     private JButton rpS = new JButton("가위 바위 보");
     private JButton mJB = new JButton("묵 찌 빠");
     private Display_Panel win;
@@ -49,15 +49,15 @@ class MainWindow extends JPanel {
         add(selGame);
         add(buttonBox);
 
-        rpS.addActionListener(new MyActionListener());
+        rpS.addActionListener(this);
+        mJB.addActionListener(this);
     }
 
-    class MyActionListener implements ActionListener {
-        public void actionPerformed(ActionEvent e) {
-            if (e.getSource() == rpS) {
-                win.change("RPS1");
-            }
-        }
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == rpS)
+            win.change("RPS1");
+        else if (e.getSource() == mJB)
+            win.change("RPS2");
     }
 }
 
@@ -65,38 +65,20 @@ class RpsButtonPan extends JPanel implements ActionListener {
     private JButton ready = new JButton("준비 완료");
     private JButton rpsBtnp[] = new JButton[3];
     private JButton rtNex[] = new JButton[2];
-    private String[] str = { "Scissors", "Rock", "Paper" };
     private String[] str2 = { "다시하기", "나가기" };
     private Random random = new Random();
     private ContentPanel content;
     private Display_Panel win;
+    private String gamename;
+    private String atk = "U";
 
-    public RpsButtonPan(Display_Panel win, ContentPanel content) {
+    public RpsButtonPan(Display_Panel win, ContentPanel content, String gamename) {
         this.win = win;
         this.content = content;
+        this.gamename = gamename;
         setLayout(new FlowLayout(FlowLayout.CENTER, 50, 0));
         setMaximumSize(new Dimension(Define.MAX_WIDTH, 100));
         this.change("ready");
-    }
-
-    private void change(String str) {
-
-        if (str.equals("ready")) {
-            removeAll();
-            ready.addActionListener(this);
-            ready.setFont(new Font("HY견고딕", Font.PLAIN, 20));
-            ready.setPreferredSize(new Dimension(150, 40));
-            add(ready);
-            updateUI();
-        } else if (str.equals("start")) {
-            removeAll();
-            RpsButton();
-            updateUI();
-        } else if (str.equals("end")) {
-            removeAll();
-            Retry();
-            updateUI();
-        }
     }
 
     public void RpsButton() {
@@ -120,12 +102,27 @@ class RpsButtonPan extends JPanel implements ActionListener {
         }
     }
 
-    public void result(int user) {
-        int com = random.nextInt(3);
-        String str[] = { "Scissors", "Rock", "Paper" };
+    private void change(String str) {
 
-        System.out.println("user : " + user + " com : " + com);
-        content.setCon(user, com);
+        if (str.equals("ready")) {
+            removeAll();
+            ready.addActionListener(this);
+            ready.setFont(new Font("HY견고딕", Font.PLAIN, 20));
+            ready.setPreferredSize(new Dimension(150, 40));
+            add(ready);
+            updateUI();
+        } else if (str.equals("start")) {
+            removeAll();
+            RpsButton();
+            updateUI();
+        } else if (str.equals("end")) {
+            removeAll();
+            Retry();
+            updateUI();
+        }
+    }
+
+    private final void rpsgame(int user, int com) {
         if (user == com) {
             System.out.println("Tie.");
             win.setLabel("비겼습니다");
@@ -141,10 +138,66 @@ class RpsButtonPan extends JPanel implements ActionListener {
         }
     }
 
+    private final void mjbgame(int user, int com) {
+
+        if (atk.equals("U")) {
+            if (user == com) {
+                System.out.println("Win");
+                System.out.println("Atk : " + atk);
+                win.setLabel("당신이 이겼습니다");
+                this.change("end");
+            } else if (user == Define.PAPER && com == Define.ROCK || user == Define.ROCK && com == Define.SCISSORS
+                    || user == Define.SCISSORS && com == Define.PAPER) {
+                this.atk = "U";
+                this.change("start");
+                System.out.println("Continue");
+            } else if (user == Define.PAPER && com == Define.SCISSORS || user == Define.ROCK && com == Define.PAPER
+                    || user == Define.SCISSORS && com == Define.ROCK) {
+                this.atk = "C";
+                this.change("start");
+                System.out.println("Continue");
+            }
+        } else if (atk.equals("C")) {
+            if (user == com) {
+                System.out.println("Lose");
+                System.out.println("Atk : " + atk);
+                win.setLabel("당신이 졌습니다");
+                this.change("end");
+            } else if (user == Define.PAPER && com == Define.ROCK || user == Define.ROCK && com == Define.SCISSORS
+                    || user == Define.SCISSORS && com == Define.PAPER) {
+                this.atk = "U";
+                this.change("start");
+                System.out.println("Continue");
+            } else if (user == Define.PAPER && com == Define.SCISSORS || user == Define.ROCK && com == Define.PAPER
+                    || user == Define.SCISSORS && com == Define.ROCK) {
+                this.atk = "C";
+                this.change("start");
+                System.out.println("Continue");
+            }
+        }
+
+    }
+
+    public void result(int user) {
+        int com = random.nextInt(3);
+        String str[] = { "Scissors", "Rock", "Paper" };
+
+        System.out.println("user : " + user + " com : " + com);
+        content.setCon(user, com);
+        if (gamename.equals("가위 바위 보"))
+            this.rpsgame(user, com);
+        else if (gamename.equals("묵 찌 빠"))
+            this.mjbgame(user, com);
+
+    }
+
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == ready) {
             System.out.println("Ready");
-            win.setLabel("선택 하세요");
+            if (gamename.equals("가위 바위 보"))
+                win.setLabel("선택 하세요");
+            else if (gamename.equals("묵 찌 빠"))
+                win.setLabel("3초 내로 선택하세요");
             this.change("start");
         }
 
@@ -172,21 +225,54 @@ class RpsButtonPan extends JPanel implements ActionListener {
 
 }
 
+class Timer {
+    public void Timer(Display_Panel win) {
+        int time = 3;
+        while (time > 0) {
+            try {
+                Thread.sleep(1000);
+                time--;
+                System.out.println(time);
+
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        System.out.println("Time Out");
+        win.setLabel("시간 초과");
+        this.change("end");
+    }
+}
+
 class ContentPanel extends JPanel {
     private Box user;
     private Box computer;
+    private Box time;
     private JLabel iconlabel = new JLabel("");
     private Display_Panel win;
+    private String gamename;
+    private Timer timer;
 
     public void setCon(int user, int com) {
-        this.user = Con("User", user);
-        this.computer = Con("Computer", com);
+        this.user = Con("User", user, gamename);
+        this.computer = Con("Computer", com, gamename);
 
         removeAll();
         add(this.user);
         add(Box.createHorizontalStrut(100));
         add(this.computer);
         updateUI();
+    }
+
+    private Box timeronoff() {
+        this.time = Box.createHorizontalBox();
+
+        time.add(new Timer());
+        time.setBorder(BorderFactory.createBevelBorder(10));
+        time.setMaximumSize(new Dimension(80, 80));
+        time.setPreferredSize(new Dimension(80, 80));
+
+        return time;
     }
 
     private Box box(int number) {
@@ -224,7 +310,7 @@ class ContentPanel extends JPanel {
         return box;
     }
 
-    private Box Con(String user, int num) {
+    private Box Con(String user, int num, String gamename) {
         Box container = Box.createVerticalBox();
 
         container.setAlignmentX(CENTER_ALIGNMENT);
@@ -244,10 +330,12 @@ class ContentPanel extends JPanel {
         return container;
     }
 
-    public ContentPanel(Display_Panel win) {
+    public ContentPanel(Display_Panel win, String gamename) {
         this.win = win;
+        this.gamename = gamename;
+        this.timer = new Timer(Display_Panel win);
 
-        setMaximumSize(new Dimension(Define.MAX_WIDTH, 170));
+        setMaximumSize(new Dimension(Define.MAX_WIDTH, 150));
         setOpaque(true);
 
         setCon(Define.NULL, Define.NULL);
@@ -258,6 +346,7 @@ class RockPaperScissors extends JPanel {
     private RpsButtonPan rpsButtonPan = null;
     private JLabel title;
     public JLabel result = new JLabel("준비 되셨습니까?");
+    public JLabel timeout;
     private ContentPanel content = null;
 
     final void SetTitle(String str) {
@@ -273,8 +362,8 @@ class RockPaperScissors extends JPanel {
 
     public RockPaperScissors(Display_Panel win, String gamename) {
         this.title = new JLabel(gamename);
-        this.content = new ContentPanel(win);
-        this.rpsButtonPan = new RpsButtonPan(win, content);
+        this.content = new ContentPanel(win, gamename);
+        this.rpsButtonPan = new RpsButtonPan(win, content, gamename);
 
         SetTitle(gamename);
 
@@ -299,6 +388,7 @@ class Display_Panel extends JFrame {
     public RockPaperScissors rps1 = null;
     public RockPaperScissors rps2 = null;
     public Define util = new Define();
+    private String sel;
 
     public Display_Panel() {
         util.setIcon();
@@ -306,17 +396,20 @@ class Display_Panel extends JFrame {
 
     public void change(String panelname) {
         if (panelname.equals("MainWindow")) {
+            this.sel = "Main";
             getContentPane().removeAll();
             getContentPane().add(mainWindow);
             revalidate();
             repaint();
         } else if (panelname.equals("RPS1")) {
+            this.sel = "RPS1";
             rps1 = new RockPaperScissors(this, "가위 바위 보");
             getContentPane().removeAll();
             getContentPane().add(rps1);
             revalidate();
             repaint();
         } else if (panelname.equals("RPS2")) {
+            this.sel = "RPS2";
             rps2 = new RockPaperScissors(this, "묵 찌 빠");
             getContentPane().removeAll();
             getContentPane().add(rps2);
@@ -326,7 +419,10 @@ class Display_Panel extends JFrame {
     }
 
     public void setLabel(String str) {
-        rps1.result.setText(str);
+        if (sel.equals("RPS1"))
+            rps1.result.setText(str);
+        else if (sel.equals("RPS2"))
+            rps2.result.setText(str);
     }
 }
 
