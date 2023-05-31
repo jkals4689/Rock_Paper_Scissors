@@ -1,5 +1,6 @@
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.awt.print.PrinterAbortException;
 import java.awt.event.ActionEvent;
 import javax.swing.ImageIcon;
 import javax.swing.*;
@@ -71,6 +72,8 @@ class RpsButtonPan extends JPanel implements ActionListener {
     private Display_Panel win;
     private String gamename;
     private String atk = "U";
+    private Timer timer;
+    private int count;
 
     public RpsButtonPan(Display_Panel win, ContentPanel content, String gamename) {
         this.win = win;
@@ -102,7 +105,7 @@ class RpsButtonPan extends JPanel implements ActionListener {
         }
     }
 
-    private void change(String str) {
+    public void change(String str) {
 
         if (str.equals("ready")) {
             removeAll();
@@ -126,15 +129,15 @@ class RpsButtonPan extends JPanel implements ActionListener {
         if (user == com) {
             System.out.println("Tie.");
             win.setLabel("비겼습니다");
-            this.change("end");
+            change("end");
         } else if (user == 0 && com == 1 || user == 1 && com == 2 || user == 2 && com == 0) {
             System.out.println("Lose.");
             win.setLabel("당신이 졌습니다");
-            this.change("end");
+            change("end");
         } else if (user == 0 && com == 2 || user == 1 && com == 0 || user == 2 && com == 1) {
             System.out.println("Win.");
             win.setLabel("당신이 이겼습니다");
-            this.change("end");
+            change("end");
         }
     }
 
@@ -145,16 +148,22 @@ class RpsButtonPan extends JPanel implements ActionListener {
                 System.out.println("Win");
                 System.out.println("Atk : " + atk);
                 win.setLabel("당신이 이겼습니다");
-                this.change("end");
+                this.timer.stop();
+                this.timer = null;
+                change("end");
             } else if (user == Define.PAPER && com == Define.ROCK || user == Define.ROCK && com == Define.SCISSORS
                     || user == Define.SCISSORS && com == Define.PAPER) {
                 this.atk = "U";
-                this.change("start");
+                this.count = 3;
+                this.content.countdown.setText(String.valueOf(count));
+                change("start");
                 System.out.println("Continue");
             } else if (user == Define.PAPER && com == Define.SCISSORS || user == Define.ROCK && com == Define.PAPER
                     || user == Define.SCISSORS && com == Define.ROCK) {
                 this.atk = "C";
-                this.change("start");
+                this.count = 3;
+                this.content.countdown.setText(String.valueOf(count));
+                change("start");
                 System.out.println("Continue");
             }
         } else if (atk.equals("C")) {
@@ -162,20 +171,50 @@ class RpsButtonPan extends JPanel implements ActionListener {
                 System.out.println("Lose");
                 System.out.println("Atk : " + atk);
                 win.setLabel("당신이 졌습니다");
-                this.change("end");
+                this.timer.stop();
+                this.timer = null;
+                change("end");
             } else if (user == Define.PAPER && com == Define.ROCK || user == Define.ROCK && com == Define.SCISSORS
                     || user == Define.SCISSORS && com == Define.PAPER) {
                 this.atk = "U";
-                this.change("start");
+                this.count = 3;
+                this.content.countdown.setText(String.valueOf(count));
+                change("start");
                 System.out.println("Continue");
             } else if (user == Define.PAPER && com == Define.SCISSORS || user == Define.ROCK && com == Define.PAPER
                     || user == Define.SCISSORS && com == Define.ROCK) {
                 this.atk = "C";
-                this.change("start");
+                this.count = 3;
+                this.content.countdown.setText(String.valueOf(count));
+                change("start");
                 System.out.println("Continue");
             }
         }
 
+    }
+
+    private void startGame() {
+        count = 3;
+        content.countdown.setText(String.valueOf(count));
+
+        timer = new Timer(1000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println(count);
+                count--;
+                content.countdown.setText(String.valueOf(count));
+
+                if (count == 0) {
+                    timer.stop();
+                    System.out.println("Time Out");
+                    win.setLabel("시간 초과");
+                    change("end");
+                    timer = null;
+                }
+            }
+        });
+
+        timer.start();
     }
 
     public void result(int user) {
@@ -196,9 +235,11 @@ class RpsButtonPan extends JPanel implements ActionListener {
             System.out.println("Ready");
             if (gamename.equals("가위 바위 보"))
                 win.setLabel("선택 하세요");
-            else if (gamename.equals("묵 찌 빠"))
+            else if (gamename.equals("묵 찌 빠")) {
                 win.setLabel("3초 내로 선택하세요");
-            this.change("start");
+                this.startGame();
+            }
+            change("start");
         }
 
         if (e.getSource() == rpsBtnp[0]) {
@@ -215,33 +256,16 @@ class RpsButtonPan extends JPanel implements ActionListener {
         if (e.getSource() == rtNex[0]) {
             System.out.println("Retry");
             win.setLabel("준비 되셨습니까?");
+            this.timer = null;
             content.setCon(Define.CLEAR, Define.CLEAR);
-            this.change("ready");
+            change("ready");
         } else if (e.getSource() == rtNex[1]) {
             System.out.println("Exit");
+            this.timer = null;
             win.change("MainWindow");
         }
     }
 
-}
-
-class Timer {
-    public void Timer(Display_Panel win) {
-        int time = 3;
-        while (time > 0) {
-            try {
-                Thread.sleep(1000);
-                time--;
-                System.out.println(time);
-
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        System.out.println("Time Out");
-        win.setLabel("시간 초과");
-        this.change("end");
-    }
 }
 
 class ContentPanel extends JPanel {
@@ -251,28 +275,36 @@ class ContentPanel extends JPanel {
     private JLabel iconlabel = new JLabel("");
     private Display_Panel win;
     private String gamename;
-    private Timer timer;
+    public JLabel countdown = new JLabel("");
 
     public void setCon(int user, int com) {
         this.user = Con("User", user, gamename);
         this.computer = Con("Computer", com, gamename);
+        this.time = timeronoff();
 
         removeAll();
         add(this.user);
-        add(Box.createHorizontalStrut(100));
+        add(Box.createHorizontalStrut(10));
+        add(this.time);
+        add(Box.createHorizontalStrut(10));
         add(this.computer);
         updateUI();
     }
 
     private Box timeronoff() {
-        this.time = Box.createHorizontalBox();
+        Box box = Box.createHorizontalBox();
 
-        time.add(new Timer());
-        time.setBorder(BorderFactory.createBevelBorder(10));
-        time.setMaximumSize(new Dimension(80, 80));
-        time.setPreferredSize(new Dimension(80, 80));
+        countdown.setFont(new Font("HY견고딕", Font.PLAIN, 40));
+        countdown.setForeground(Color.black);
+        countdown.setAlignmentX(CENTER_ALIGNMENT);
+        countdown.setOpaque(true);
 
-        return time;
+        box.add(countdown);
+        box.setBorder(BorderFactory.createBevelBorder(10));
+        box.setMaximumSize(new Dimension(80, 80));
+        box.setPreferredSize(new Dimension(80, 80));
+
+        return box;
     }
 
     private Box box(int number) {
@@ -333,7 +365,6 @@ class ContentPanel extends JPanel {
     public ContentPanel(Display_Panel win, String gamename) {
         this.win = win;
         this.gamename = gamename;
-        this.timer = new Timer(Display_Panel win);
 
         setMaximumSize(new Dimension(Define.MAX_WIDTH, 150));
         setOpaque(true);
