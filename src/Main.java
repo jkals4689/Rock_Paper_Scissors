@@ -1,6 +1,6 @@
 import java.awt.*;
 import java.awt.event.ActionListener;
-import java.awt.print.PrinterAbortException;
+// import java.awt.print.PrinterAbortException;
 import java.awt.event.ActionEvent;
 import javax.swing.ImageIcon;
 import javax.swing.*;
@@ -79,48 +79,48 @@ class RpsButtonPan extends JPanel implements ActionListener {
         this.win = win;
         this.content = content;
         this.gamename = gamename;
-        setLayout(new FlowLayout(FlowLayout.CENTER, 50, 0));
-        setMaximumSize(new Dimension(Define.MAX_WIDTH, 100));
-        this.change("ready");
-    }
+        this.startGame();
 
-    public void RpsButton() {
+        ready.addActionListener(this);
+        ready.setFont(new Font("HY견고딕", Font.PLAIN, 20));
+        ready.setPreferredSize(new Dimension(150, 40));
+
         for (int i = 0; i < rpsBtnp.length; i++) {
             rpsBtnp[i] = new JButton("");
             rpsBtnp[i].setIcon(win.util.icon[i]);
             rpsBtnp[i].addActionListener(this);
             rpsBtnp[i].setFont(new Font("HY견고딕", Font.PLAIN, 20));
             rpsBtnp[i].setPreferredSize(new Dimension(80, 80));
-            add(rpsBtnp[i]);
         }
-    }
 
-    public void Retry() {
         for (int i = 0; i < rtNex.length; i++) {
             rtNex[i] = new JButton(str2[i]);
             rtNex[i].addActionListener(this);
             rtNex[i].setFont(new Font("HY견고딕", Font.PLAIN, 20));
             rtNex[i].setPreferredSize(new Dimension(150, 40));
-            add(rtNex[i]);
         }
+
+        setLayout(new FlowLayout(FlowLayout.CENTER, 50, 0));
+        setMaximumSize(new Dimension(Define.MAX_WIDTH, 100));
+        this.change("ready");
     }
 
     public void change(String str) {
 
         if (str.equals("ready")) {
             removeAll();
-            ready.addActionListener(this);
-            ready.setFont(new Font("HY견고딕", Font.PLAIN, 20));
-            ready.setPreferredSize(new Dimension(150, 40));
             add(ready);
             updateUI();
         } else if (str.equals("start")) {
             removeAll();
-            RpsButton();
+            add(rpsBtnp[0]);
+            add(rpsBtnp[1]);
+            add(rpsBtnp[2]);
             updateUI();
         } else if (str.equals("end")) {
             removeAll();
-            Retry();
+            add(rtNex[0]);
+            add(rtNex[1]);
             updateUI();
         }
     }
@@ -149,7 +149,6 @@ class RpsButtonPan extends JPanel implements ActionListener {
                 System.out.println("Atk : " + atk);
                 win.setLabel("당신이 이겼습니다");
                 this.timer.stop();
-                this.timer = null;
                 change("end");
             } else if (user == Define.PAPER && com == Define.ROCK || user == Define.ROCK && com == Define.SCISSORS
                     || user == Define.SCISSORS && com == Define.PAPER) {
@@ -172,7 +171,6 @@ class RpsButtonPan extends JPanel implements ActionListener {
                 System.out.println("Atk : " + atk);
                 win.setLabel("당신이 졌습니다");
                 this.timer.stop();
-                this.timer = null;
                 change("end");
             } else if (user == Define.PAPER && com == Define.ROCK || user == Define.ROCK && com == Define.SCISSORS
                     || user == Define.SCISSORS && com == Define.PAPER) {
@@ -195,7 +193,7 @@ class RpsButtonPan extends JPanel implements ActionListener {
 
     private void startGame() {
         count = 3;
-        content.countdown.setText(String.valueOf(count));
+        // content.countdown.setText(String.valueOf(count));
 
         timer = new Timer(1000, new ActionListener() {
             @Override
@@ -205,21 +203,18 @@ class RpsButtonPan extends JPanel implements ActionListener {
                 content.countdown.setText(String.valueOf(count));
 
                 if (count == 0) {
-                    timer.stop();
                     System.out.println("Time Out");
                     win.setLabel("시간 초과");
                     change("end");
-                    timer = null;
+                    timer.stop();
                 }
             }
         });
-
-        timer.start();
     }
 
     public void result(int user) {
         int com = random.nextInt(3);
-        String str[] = { "Scissors", "Rock", "Paper" };
+        // String str[] = { "Scissors", "Rock", "Paper" };
 
         System.out.println("user : " + user + " com : " + com);
         content.setCon(user, com);
@@ -233,11 +228,13 @@ class RpsButtonPan extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == ready) {
             System.out.println("Ready");
-            if (gamename.equals("가위 바위 보"))
+            if (gamename.equals("가위 바위 보")) {
                 win.setLabel("선택 하세요");
-            else if (gamename.equals("묵 찌 빠")) {
+            } else if (gamename.equals("묵 찌 빠")) {
                 win.setLabel("3초 내로 선택하세요");
-                this.startGame();
+                count = 3;
+                this.content.countdown.setText(String.valueOf(count));
+                timer.start();
             }
             change("start");
         }
@@ -256,7 +253,7 @@ class RpsButtonPan extends JPanel implements ActionListener {
         if (e.getSource() == rtNex[0]) {
             System.out.println("Retry");
             win.setLabel("준비 되셨습니까?");
-            this.timer = null;
+            count = 3;
             content.setCon(Define.CLEAR, Define.CLEAR);
             change("ready");
         } else if (e.getSource() == rtNex[1]) {
@@ -272,14 +269,18 @@ class ContentPanel extends JPanel {
     private Box user;
     private Box computer;
     private Box time;
-    private JLabel iconlabel = new JLabel("");
     private Display_Panel win;
     private String gamename;
+    private JLabel iconlabel = new JLabel("");
     public JLabel countdown = new JLabel("");
 
     public void setCon(int user, int com) {
-        this.user = Con("User", user, gamename);
-        this.computer = Con("Computer", com, gamename);
+        this.user = null;
+        this.computer = null;
+        this.time = null;
+
+        this.user = Con("User", user);
+        this.computer = Con("Computer", com);
         this.time = timeronoff();
 
         removeAll();
@@ -342,7 +343,7 @@ class ContentPanel extends JPanel {
         return box;
     }
 
-    private Box Con(String user, int num, String gamename) {
+    private Box Con(String user, int num) {
         Box container = Box.createVerticalBox();
 
         container.setAlignmentX(CENTER_ALIGNMENT);
