@@ -1,12 +1,9 @@
 import java.awt.*;
 import java.awt.event.ActionListener;
-// import java.awt.print.PrinterAbortException;
 import java.awt.event.ActionEvent;
-import javax.swing.ImageIcon;
 import javax.swing.*;
 
 import java.util.Random;
-import java.util.zip.DeflaterInputStream;
 
 class Define {
     public static final int MAX_WIDTH = 500;
@@ -39,15 +36,17 @@ class MainWindow extends JPanel implements ActionListener {
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         JLabel selGame = new JLabel("게임을 선택하시오");
+        selGame.setFont(new Font("HY견고딕", Font.BOLD, 40));
         selGame.setAlignmentX(Component.CENTER_ALIGNMENT);
-        selGame.setFont(selGame.getFont().deriveFont(30.0f));
 
         Box buttonBox = Box.createHorizontalBox();
+        rpS.setFont(new Font("HY견고딕", Font.PLAIN, 20));
+        mJB.setFont(new Font("HY견고딕", Font.PLAIN, 20));
         buttonBox.add(rpS).setMaximumSize(new Dimension(150, 150));
         buttonBox.add(Box.createHorizontalStrut(50));
         buttonBox.add(mJB).setMaximumSize(new Dimension(150, 150));
-
-        add(Box.createVerticalStrut(50));
+        buttonBox.setPreferredSize(new Dimension(200, 200));
+        add(Box.createVerticalStrut(100));
         add(selGame);
         add(buttonBox);
 
@@ -111,6 +110,7 @@ class RpsButtonPan extends JPanel implements ActionListener {
         if (str.equals("ready")) {
             removeAll();
             add(ready);
+            add(rtNex[1]);
             updateUI();
         } else if (str.equals("start")) {
             removeAll();
@@ -255,6 +255,7 @@ class RpsButtonPan extends JPanel implements ActionListener {
             win.setLabel("준비 되셨습니까?");
             count = 3;
             content.setIconlabel(Define.CLEAR, Define.CLEAR);
+            content.countdown.setText("");
             change("ready");
         } else if (e.getSource() == rtNex[1]) {
             System.out.println("Exit");
@@ -268,8 +269,8 @@ class RpsButtonPan extends JPanel implements ActionListener {
 class ContentPanel extends JPanel {
     private Display_Panel win;
     private int connum = 0;
-    private JLabel iconlabel = new JLabel("?");
-    private JLabel usericonlabel = new JLabel("?");
+    private JLabel iconlabel = new JLabel("");
+    private JLabel usericonlabel = new JLabel("");
     public JLabel countdown = new JLabel("");
 
     public void setIconlabel(int user, int com) {
@@ -279,25 +280,7 @@ class ContentPanel extends JPanel {
         } else if (user == Define.CLEAR && com == Define.CLEAR) {
             this.usericonlabel.setIcon(null);
             this.iconlabel.setIcon(null);
-            // this.usericonlabel.setText("");
-            // this.iconlabel.setText("");
         }
-    }
-
-    private Box timeronoff() {
-        Box box = Box.createHorizontalBox();
-
-        countdown.setFont(new Font("HY견고딕", Font.PLAIN, 40));
-        countdown.setForeground(Color.black);
-        countdown.setAlignmentX(CENTER_ALIGNMENT);
-        countdown.setOpaque(true);
-
-        box.add(countdown);
-        box.setBorder(BorderFactory.createBevelBorder(10));
-        box.setMaximumSize(new Dimension(80, 80));
-        box.setPreferredSize(new Dimension(80, 80));
-
-        return box;
     }
 
     private Box box() {
@@ -344,10 +327,14 @@ class ContentPanel extends JPanel {
         setMaximumSize(new Dimension(Define.MAX_WIDTH, 150));
         setOpaque(true);
 
+        countdown.setFont(new Font("HY견고딕", Font.PLAIN, 40));
+        countdown.setPreferredSize(new Dimension(40, 100));
+        countdown.setForeground(Color.black);
+
         add(Con("User"));
-        add(Box.createHorizontalStrut(10));
-        add(timeronoff());
-        add(Box.createHorizontalStrut(10));
+        add(Box.createHorizontalStrut(30));
+        add(countdown);
+        add(Box.createHorizontalStrut(30));
         add(Con("Computer"));
     }
 }
