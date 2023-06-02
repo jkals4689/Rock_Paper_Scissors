@@ -6,6 +6,7 @@ import javax.swing.ImageIcon;
 import javax.swing.*;
 
 import java.util.Random;
+import java.util.zip.DeflaterInputStream;
 
 class Define {
     public static final int MAX_WIDTH = 500;
@@ -214,10 +215,9 @@ class RpsButtonPan extends JPanel implements ActionListener {
 
     public void result(int user) {
         int com = random.nextInt(3);
-        // String str[] = { "Scissors", "Rock", "Paper" };
 
         System.out.println("user : " + user + " com : " + com);
-        content.setCon(user, com);
+        content.setIconlabel(user, com);
         if (gamename.equals("가위 바위 보"))
             this.rpsgame(user, com);
         else if (gamename.equals("묵 찌 빠"))
@@ -254,7 +254,7 @@ class RpsButtonPan extends JPanel implements ActionListener {
             System.out.println("Retry");
             win.setLabel("준비 되셨습니까?");
             count = 3;
-            content.setCon(Define.CLEAR, Define.CLEAR);
+            content.setIconlabel(Define.CLEAR, Define.CLEAR);
             change("ready");
         } else if (e.getSource() == rtNex[1]) {
             System.out.println("Exit");
@@ -266,30 +266,22 @@ class RpsButtonPan extends JPanel implements ActionListener {
 }
 
 class ContentPanel extends JPanel {
-    private Box user;
-    private Box computer;
-    private Box time;
     private Display_Panel win;
-    private String gamename;
-    private JLabel iconlabel = new JLabel("");
+    private int connum = 0;
+    private JLabel iconlabel = new JLabel("?");
+    private JLabel usericonlabel = new JLabel("?");
     public JLabel countdown = new JLabel("");
 
-    public void setCon(int user, int com) {
-        this.user = null;
-        this.computer = null;
-        this.time = null;
-
-        this.user = Con("User", user);
-        this.computer = Con("Computer", com);
-        this.time = timeronoff();
-
-        removeAll();
-        add(this.user);
-        add(Box.createHorizontalStrut(10));
-        add(this.time);
-        add(Box.createHorizontalStrut(10));
-        add(this.computer);
-        updateUI();
+    public void setIconlabel(int user, int com) {
+        if (user != Define.CLEAR && com != Define.CLEAR) {
+            this.usericonlabel.setIcon(win.util.icon[user]);
+            this.iconlabel.setIcon(win.util.icon[com]);
+        } else if (user == Define.CLEAR && com == Define.CLEAR) {
+            this.usericonlabel.setIcon(null);
+            this.iconlabel.setIcon(null);
+            // this.usericonlabel.setText("");
+            // this.iconlabel.setText("");
+        }
     }
 
     private Box timeronoff() {
@@ -308,42 +300,25 @@ class ContentPanel extends JPanel {
         return box;
     }
 
-    private Box box(int number) {
+    private Box box() {
         Box box = Box.createHorizontalBox();
 
-        if (number == Define.ROCK) {
-            System.out.println("Rock");
-            iconlabel.setIcon(win.util.icon[Define.ROCK]);
-            box.add(iconlabel);
-        } else if (number == Define.SCISSORS) {
-            System.out.println("Scissors");
-            iconlabel.setIcon(win.util.icon[Define.SCISSORS]);
-            box.add(iconlabel);
-        } else if (number == Define.PAPER) {
-            System.out.println("Paper");
-            iconlabel.setIcon(win.util.icon[Define.PAPER]);
-            box.add(iconlabel);
-        } else if (number == Define.CLEAR) {
-            System.out.println("Clear");
-            iconlabel.setIcon(null);
-            iconlabel.setText("?");
-            box.add(iconlabel);
-        } else if (number == Define.NULL) {
-            System.out.println("null");
-            iconlabel = new JLabel("?", SwingConstants.CENTER);
-            box.add(iconlabel);
-        }
+        if (this.connum == 0)
+            box.add(this.usericonlabel);
+        else
+            box.add(this.iconlabel);
 
         box.setBorder(BorderFactory.createBevelBorder(10));
         box.setBackground(Color.white);
         box.setMaximumSize(new Dimension(80, 80));
         box.setPreferredSize(new Dimension(80, 80));
         box.setOpaque(true);
+        this.connum++;
 
         return box;
     }
 
-    private Box Con(String user, int num) {
+    private Box Con(String user) {
         Box container = Box.createVerticalBox();
 
         container.setAlignmentX(CENTER_ALIGNMENT);
@@ -354,7 +329,7 @@ class ContentPanel extends JPanel {
         label.setFont(label.getFont().deriveFont(25.0f));
         label.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        Box box = box(num);
+        Box box = box();
 
         container.add(label);
         container.add(Box.createVerticalStrut(10));
@@ -365,12 +340,15 @@ class ContentPanel extends JPanel {
 
     public ContentPanel(Display_Panel win, String gamename) {
         this.win = win;
-        this.gamename = gamename;
 
         setMaximumSize(new Dimension(Define.MAX_WIDTH, 150));
         setOpaque(true);
 
-        setCon(Define.NULL, Define.NULL);
+        add(Con("User"));
+        add(Box.createHorizontalStrut(10));
+        add(timeronoff());
+        add(Box.createHorizontalStrut(10));
+        add(Con("Computer"));
     }
 }
 
