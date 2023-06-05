@@ -23,7 +23,7 @@ class Define {
      */
     public void setIcon() {
         for (int i = 0; i < str.length; i++) {
-            icon[i] = new ImageIcon("src\\img\\" + str[(str.length - 1) - i] + ".jpg");
+            icon[i] = new ImageIcon("img\\" + str[(str.length - 1) - i] + ".jpg");
             Image img = icon[i].getImage();
             Image changeImg = img.getScaledInstance(80, 80, Image.SCALE_SMOOTH);
             icon[i] = new ImageIcon(changeImg);
@@ -322,10 +322,10 @@ class RpsButtonPan extends JPanel implements ActionListener {
             if (gamename.equals("묵 찌 빠")) {
                 this.atk = "U"; // atk의 값을 "U"로 변경 | 사용자가 공격
                 count = 3; // count의 값을 3으로 변경 | 타이머의 시간을 3초로 변경
-                content.setIconlabel(Define.CLEAR, Define.CLEAR); // ContentPanel 클래스의 메소드 사용 | 사용자, 컴퓨터가 선택한 가위, 바위, 보
-                                                                  // 이미지 초기화
                 content.countdown.setText(""); // ContentPanel 클래스의 메소드 사용 | 문자열의 내용 변경
             }
+            // 이미지 초기화
+            content.setIconlabel(Define.CLEAR, Define.CLEAR); // ContentPanel 클래스의 메소드 사용 | 사용자, 컴퓨터가 선택한 가위, 바위, 보
             change("ready"); // 패널의 내용 변경 | 준비 완료 버튼, 나가기 버튼 추가
         } else if (e.getSource() == rtNex[1]) {
             System.out.println("Exit"); // "Exit" 출력
