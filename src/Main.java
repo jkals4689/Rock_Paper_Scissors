@@ -41,15 +41,19 @@ class MainWindow extends JPanel implements ActionListener {
 
     public MainWindow(Display_Panel win) {
         this.win = win; // Display_Panel 클래스 설정
+        setBackground(Color.LIGHT_GRAY); // MainWindow의 배경색 설정
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS)); // MainWindow의 레이아웃 설정(BoxLayout)
         JLabel selGame = new JLabel("게임을 선택하시오"); // "게임을 선택하시오"의 문자열 설정
         selGame.setFont(new Font("HY견고딕", Font.BOLD, 40)); // selGame의 폰트 설정
         selGame.setAlignmentX(Component.CENTER_ALIGNMENT); // selGame의 정렬 설정
 
+
         Box buttonBox = Box.createHorizontalBox(); // 가위 바위 보, 묵 찌 빠 버튼을 담을 Box 생성
         rpS.setFont(new Font("HY견고딕", Font.PLAIN, 20)); // 가위 바위 보 버튼의 폰트 설정
+        rpS.setBackground(Color.white); // 가위 바위 보 버튼의 배경색 설정
         mJB.setFont(new Font("HY견고딕", Font.PLAIN, 20)); // 묵 찌 빠 버튼의 폰트 설정
+        mJB.setBackground(Color.white); // 묵 찌 빠 버튼의 배경색 설정
         buttonBox.add(rpS).setMaximumSize(new Dimension(150, 150)); // 가위 바위 보 버튼을 buttonBox에 추가
         buttonBox.add(Box.createHorizontalStrut(50)); // 가위 바위 보 버튼과 묵 찌 빠 버튼 사이의 간격 설정
         buttonBox.add(mJB).setMaximumSize(new Dimension(150, 150)); // 묵 찌 빠 버튼을 buttonBox에 추가
@@ -95,8 +99,10 @@ class RpsButtonPan extends JPanel implements ActionListener {
         this.content = content; // ContentPanel 클래스 설정 | ContentPanel 클래스의 메소드 사용을 위해 필요
         this.gamename = gamename; // 게임 이름 설정 | 게임 이름에 따라 다른 동작을 하기 위해 필요
         this.startGame(); // 묵 찌 빠 게임에서 사용 | 게임 시작 시 타이머 시작
+        setBackground(Color.lightGray); // RpsButtonPan의 배경색 설정
 
         ready.addActionListener(this); // 준비 완료 버튼에 ActionListener 추가
+        ready.setBackground(Color.white); // 준비 완료 버튼의 배경색 설정
         ready.setFont(new Font("HY견고딕", Font.PLAIN, 20)); // 준비 완료 버튼의 폰트 설정 | 폰트, 크기 설정
         ready.setPreferredSize(new Dimension(150, 40)); // 준비 완료 버튼의 크기 설정 | 가로, 세로 크기 설정
 
@@ -119,6 +125,7 @@ class RpsButtonPan extends JPanel implements ActionListener {
         for (int i = 0; i < rtNex.length; i++) {
             rtNex[i] = new JButton(str2[i]);
             rtNex[i].addActionListener(this);
+            rtNex[i].setBackground(Color.white);
             rtNex[i].setFont(new Font("HY견고딕", Font.PLAIN, 20));
             rtNex[i].setPreferredSize(new Dimension(150, 40));
         }
@@ -405,6 +412,7 @@ class ContentPanel extends JPanel {
      */
     public ContentPanel(Display_Panel win, String gamename) {
         this.win = win; // Display_Panel 클래스 설정
+        setBackground(Color.lightGray); // ContentPanel의 배경색 설정
 
         setMaximumSize(new Dimension(Define.MAX_WIDTH, 150)); // ContentPanel의 크기 설정
         setOpaque(true); // ContentPanel의 투명도 설정
@@ -449,6 +457,7 @@ class RockPaperScissors extends JPanel {
         this.title = new JLabel(gamename); // 게임 이름 출력
         this.content = new ContentPanel(win, gamename); // ContentPanel 클래스 설정
         this.rpsButtonPan = new RpsButtonPan(win, content, gamename); // RpsButtonPan 클래스 설정
+        setBackground(Color.lightGray); // RockPaperScissors의 배경색 설정
 
         SetTitle(gamename); // 게임 이름 출력
 
