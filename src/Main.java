@@ -1,6 +1,6 @@
 import com.rock_paper_scissors.panels.DisplayPanel;
 import com.rock_paper_scissors.panels.MainWindow;
-import com.rock_paper_scissros.define.Define;
+import com.rock_paper_scissors.Define;
 
 import javax.swing.*;
 

@@ -6,10 +6,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class MainWindow extends JPanel implements ActionListener {
-    private JButton rps = new JButton("가위 바위 보");
-    private JButton mjb = new JButton("묵 찌 빠");
-    private DisplayPanel win;
+    private final JButton rps = new JButton("가위 바위 보");
+    private final JButton mjb = new JButton("묵 찌 빠");
 
+    private final DisplayPanel win;
     public MainWindow(DisplayPanel win) {
         this.win = win;
         setBackground(Color.LIGHT_GRAY);
@@ -33,9 +33,11 @@ public class MainWindow extends JPanel implements ActionListener {
         add(Box.createVerticalStrut(100));
         add(selGame);
         add(buttonBox);
+
+        rps.addActionListener(this);
+        mjb.addActionListener(this);
     }
     @Override
     public void actionPerformed(ActionEvent e) {
-
     }
 }
